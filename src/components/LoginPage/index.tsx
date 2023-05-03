@@ -15,8 +15,8 @@ export default function LoginPage() {
     const { register, handleSubmit, formState: { errors } } = useForm<loginFormData>({
         resolver: zodResolver(loginFormSchema),
     });
-    
-    async function handleLoginSubmit(data:loginFormData) {
+
+    async function handleLoginSubmit(data: loginFormData) {
         console.log(data)
     }
 
@@ -30,6 +30,7 @@ export default function LoginPage() {
 
                 <input type="submit" />
             </form>
+
             <Link to={"/register"}>
                 <p>Não tem uma conta? Cadastre-se!</p>
             </Link>
