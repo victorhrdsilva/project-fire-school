@@ -1,25 +1,32 @@
 import { Link } from "react-router-dom"
 import { Container } from "./style"
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
-type Inputs = {
-    example: string,
-    exampleRequired: string,
-};
+const loginFormSchema = z.object({
+    email: z.string().email({ message: 'Insira um email válido' }).transform((email) => email.toLocaleLowerCase),
+    password: z.string().min(6, { message: 'A senha necessita de ao menos 6 dígitos' }),
+});
+
+type loginFormData = z.infer<typeof loginFormSchema>
 
 export default function LoginPage() {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
-    const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
-
-    console.log(watch("example")) // watch input value by passing the name of it
+    const { register, handleSubmit, formState: { errors } } = useForm<loginFormData>({
+        resolver: zodResolver(loginFormSchema),
+    });
+    
+    async function handleLoginSubmit(data:loginFormData) {
+        console.log(data)
+    }
 
     return (
         <Container>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <input type="email" placeholder="email" {...register("exampleRequired", { required: true })} />
-                {errors.exampleRequired && <span>É necessário informar o Email</span>}
-                <input  type="password" placeholder="senha" {...register("exampleRequired", { required: true })} />
-                {errors.exampleRequired && <span>É necessário informar a Senha</span>}
+            <form onSubmit={handleSubmit(handleLoginSubmit)}>
+                <input type="email" placeholder="email" {...register('email')} />
+                {errors.email?.message && <span>{errors.email?.message}</span>}
+                <input type="password" placeholder="senha" {...register('password', { required: true })} />
+                {errors.password?.message && <span>{errors.password?.message}</span>}
 
                 <input type="submit" />
             </form>
