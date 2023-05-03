@@ -6,7 +6,7 @@ import * as z from 'zod';
 
 const loginFormSchema = z.object({
     email: z.string().email({ message: 'Insira um email válido' }).transform((email) => email.toLocaleLowerCase),
-    password: z.string().min(6, { message: 'A senha necessita de ao menos 6 dígitos' }),
+    password: z.string().min(6, { message: 'Senha requer ao menos 6 dígitos' }),
 });
 
 type loginFormData = z.infer<typeof loginFormSchema>
