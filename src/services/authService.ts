@@ -1,22 +1,32 @@
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
-const auth = getAuth();
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 
-async function login (body: {password: string, email: string}) {
+
+async function createUser(body: { password: string, email: string }) {
+    const auth = getAuth();
     await createUserWithEmailAndPassword(auth, body.email, body.password)
-            .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                console.log(user)
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // ..
-                console.log(errorCode, errorMessage)
-            });
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            return user
+        })
+        .catch((error) => {
+            return error
+        });
 }
 
-export {login}
+async function login(body: { password: string, email: string }) {
+    const auth = getAuth();
+    await signInWithEmailAndPassword(auth, body.email, body.password)
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            console.log(user)
+            return user
+        })
+        .catch((error) => {
+            return error
+        })
+}
+
+export { login, createUser }

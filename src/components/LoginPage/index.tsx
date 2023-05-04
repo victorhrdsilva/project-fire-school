@@ -3,9 +3,10 @@ import { Container } from "./style"
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { login } from "../../services/authService";
 
 const loginFormSchema = z.object({
-    email: z.string().email({ message: 'Insira um email válido' }).transform((email) => email.toLocaleLowerCase),
+    email: z.string().email({ message: 'Insira um email válido' }),
     password: z.string().min(6, { message: 'Senha requer ao menos 6 dígitos' }),
 });
 
@@ -17,7 +18,12 @@ export default function LoginPage() {
     });
 
     async function handleLoginSubmit(data: loginFormData) {
-        console.log(data)
+        login(data).then((res) => {
+            console.log(res)
+        }).catch((res) => { 
+            console.log(res)
+            alert(res.response.data);
+        })
     }
 
     return (
