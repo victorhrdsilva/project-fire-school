@@ -13,4 +13,4 @@ const firebaseConfig = {
   
   initializeApp(firebaseConfig);
 
-}
+};
